@@ -1,0 +1,13 @@
+<h1>Pets Cadastrados</h1>
+<a href="{% url 'cadastrar_pet' %}">Cadastrar novo pet</a>
+<ul>
+  {% for pet in pets %}
+    <li>
+      {{ pet.nome }} - 
+      <a href="{% url 'editar_pet' pet.id %}">Editar</a> |
+      <a href="{% url 'remover_pet' pet.id %}">Remover</a>
+    </li>
+  {% empty %}
+    <li>Nenhum pet cadastrado.</li>
+  {% endfor %}
+</ul>
