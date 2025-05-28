@@ -6,18 +6,18 @@
 <h1 class="mb-4">🐾 Meus Pets</h1>
 
 {% if pets %}
-    <ul class="list-group">
-        {% for pet in pets %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>{{ pet.nome }} - {{ pet.raca }}</span>
-                <span>
-                    <a href="{% url 'editar_pet' pet.id %}" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="{% url 'remover_pet' pet.id %}" class="btn btn-sm btn-danger">Remover</a>
-                </span>
-            </li>
-        {% endfor %}
-    </ul>
+<ul class="list-group">
+    {% for pet in pets %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>{{ pet.nome }} - {{ pet.tipo }}</span>
+        <span>
+            <a href="{% url 'editar_pet' pet.id %}" class="btn btn-sm btn-warning">Editar</a>
+            <a href="{% url 'remover_pet' pet.id %}" class="btn btn-sm btn-danger">Remover</a>
+        </span>
+    </li>
+    {% endfor %}
+</ul>
 {% else %}
-    <div class="alert alert-info mt-3">Nenhum pet cadastrado.</div>
+<div class="alert alert-info mt-3">Nenhum pet cadastrado.</div>
 {% endif %}
 {% endblock %}
