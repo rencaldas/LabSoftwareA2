@@ -1,6 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
+# from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pet
 from .forms import PetForm
+
+
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html')
+
+
 
 def listar_pets(request):
     pets = Pet.objects.all()

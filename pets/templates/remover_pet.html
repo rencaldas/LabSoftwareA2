@@ -1,0 +1,15 @@
+{% extends 'index.html' %}
+
+{% block title %}Remover Pet{% endblock %}
+
+{% block content %}
+<h1 class="text-danger mb-4">Remover Pet</h1>
+
+<p>Tem certeza de que deseja remover <strong>{{ pet.nome }}</strong>?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, remover</button>
+    <a href="{% url 'listar_pets' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
