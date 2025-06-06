@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Gerenciar Clientes{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>Gerenciar Clientes</h3>
+
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.instance.id %}
+            <input type="hidden" name="cliente_id" value="{{ form.instance.id }}">
+        {% endif %}
+        <button type="submit" class="btn btn-success">Salvar</button>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.nome }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.telefone }}</td>
+                <td>
+                    <a href="?editar={{ cliente.id }}" class="btn btn-sm btn-primary">Editar</a>
+                    <a href="{% url 'deletar_cliente' cliente.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja excluir?')">Excluir</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

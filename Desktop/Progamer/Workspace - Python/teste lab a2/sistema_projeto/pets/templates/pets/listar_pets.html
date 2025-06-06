@@ -1,0 +1,46 @@
+{% extends 'pets/base.html' %}
+
+{% block title %}Lista de Pets{% endblock %}
+
+{% block content %}
+<h1>Lista de Pets</h1>
+
+<div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+  {% for pet in pets %}
+    <div style="width: 300px; border: 1px solid #ccc; border-radius: 8px; padding: 15px; box-sizing: border-box; text-align: left;">
+      {% if user.is_staff %}
+        <div style="margin-bottom: 10px;">
+          <a href="{% url 'editar_pet' pet.id %}" 
+             style="display: inline-block; padding: 6px 12px; background-color: #28a745; color: white; border-radius: 4px; text-decoration: none; font-weight: bold;">
+            Editar
+          </a>
+        </div>
+      {% endif %}
+      
+      {% if pet.foto %}
+        <img src="{{ pet.foto.url }}" alt="Foto de {{ pet.nome }}" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;">
+      {% else %}
+        <div style="width: 100%; height: 180px; background: #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; margin-bottom: 10px;">
+          Sem Foto
+        </div>
+      {% endif %}
+      
+      <h3>{{ pet.nome }}</h3>
+      <p><strong>Raça:</strong> {{ pet.raca }}</p>
+      <p><strong>Idade:</strong> {{ pet.idade }} anos</p>
+      <p style="margin-top: 10px;"><strong>Descrição:</strong><br> {{ pet.descricao }}</p>
+      
+      {% if user.is_staff %}
+        <a href="{% url 'remover_pet' pet.id %}" style="color: red; font-weight: bold; display: inline-block; margin-top: 10px;">Remover</a>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p>Nenhum pet cadastrado.</p>
+  {% endfor %}
+</div>
+
+<a href="{% url 'cadastrar_pet' %}" style="display: inline-block; margin-top: 30px; padding: 12px 20px; background-color: #007bff; color: white; border-radius: 4px; text-decoration: none;">
+  Cadastrar Novo Pet
+</a>
+
+{% endblock %}

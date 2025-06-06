@@ -1,0 +1,43 @@
+{% extends 'pets/base.html' %}]
+{% load static %}
+
+{% block title %}Bem-vindo ao PetLar{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center; margin-bottom: 30px;">Adote um Aumigo Hoje!</h1>
+
+<!-- Banner ou imagem de destaque -->
+<div style="background-image: url('{% static "img/banner-pet.jpg" %}');"></div>
+
+<!-- Texto de introdução -->
+<div style="text-align: center; max-width: 800px; margin: auto; font-size: 1.2em; margin-bottom: 50px;">
+  <p>Somos apaixonados por conectar pessoas a animais que precisam de um lar. Conheça nossos pets disponíveis para adoção e transforme vidas!</p>
+</div>
+
+<!-- Carrossel de pets -->
+<h2 style="margin-left: 20px;">Aumigos em Destaque</h2>
+<div style="overflow-x: auto; white-space: nowrap; padding: 20px;">
+  {% for pet in pets|slice:":5" %}
+    <div style="display: inline-block; vertical-align: top; width: 250px; margin-right: 20px; border: 1px solid #ccc; border-radius: 10px; padding: 10px; text-align: left;">
+      {% if pet.foto %}
+        <img src="{{ pet.foto.url }}" alt="Foto de {{ pet.nome }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;">
+      {% else %}
+        <div style="width: 100%; height: 180px; background: #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888;">
+          Sem Foto
+        </div>
+      {% endif %}
+      <h3 style="margin-top: 10px;">{{ pet.nome }}</h3>
+      <p><strong>Raça:</strong> {{ pet.raca }}</p>
+      <p><strong>Idade:</strong> {{ pet.idade }} anos</p>
+      <a href="{% url 'listar_pets' %}" style="color: #007bff;">Ver todos os pets</a>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Seções adicionais -->
+<div style="margin-top: 60px; text-align: center;">
+  <h2>Por que Adotar?</h2>
+  <p style="max-width: 700px; margin: auto;">Adotar um animal é um ato de amor. Além de salvar uma vida, você ganha um amigo fiel. Nossos pets estão prontos para te receber com carinho!</p>
+</div>
+
+{% endblock %}

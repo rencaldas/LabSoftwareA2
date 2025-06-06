@@ -1,0 +1,38 @@
+{% extends 'pets/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Cadastrar Pet{% endblock %}
+
+{% block content %}
+<h2>Cadastrar Pet</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        <label for="{{ form.nome.id_for_label }}">Nome:</label>
+        {{ form.nome|add_class:"form-control" }}
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.idade.id_for_label }}">Idade:</label>
+        {{ form.idade|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        <label for="{{ form.raca.id_for_label }}">Raça:</label>
+        {{ form.raca|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        <label for="{{ form.descricao.id_for_label }}">Descrição:</label>
+        {{ form.descricao|add_class:"form-control" }}
+    </div>
+
+    <div class="mb-3">
+        <label for="{{ form.foto.id_for_label }}">Foto:</label>
+        {{ form.foto|add_class:"form-control" }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>
+{% endblock %}
