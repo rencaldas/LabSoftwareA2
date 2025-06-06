@@ -1,0 +1,293 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}Bem-vindo ao PetLar{% endblock %}
+
+{% block content %}
+
+<style>
+  .intro-container {
+    max-width: 900px;
+    margin: 0 auto 60px auto;
+    font-size: 1.35rem;
+    color: #333;
+    line-height: 1.8;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0 20px;
+  }
+
+  h1.main-title {
+  text-align: center;
+  margin-bottom: 50px;
+  color: #111;
+  font-weight: 900;
+  font-size: 3.8rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 30px; /* adicione esta linha */
+}
+
+  .pets-carousel {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 25px 20px;
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #eee;
+    background: #f9fafb;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+    margin: 0 auto 70px auto;
+    max-width: 1100px;
+  }
+
+  .pet-card {
+    display: inline-block;
+    vertical-align: top;
+    width: 260px;
+    margin-right: 25px;
+    border-radius: 18px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .pet-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+  }
+
+  .pet-image {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 14px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .pet-no-photo {
+    width: 100%;
+    height: 190px;
+    background: #e2e2e2;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  .pet-name {
+    margin: 10px 0 8px 0;
+    font-weight: 900;
+    color: #222;
+    font-size: 1.4rem;
+  }
+
+  .pet-info {
+    margin: 4px 0;
+    font-weight: 600;
+    color: #555;
+    font-size: 1rem;
+  }
+
+  .btn-details {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 11px 22px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.6);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .btn-details:hover {
+    background-color: #0056b3;
+    box-shadow: 0 9px 25px rgba(0, 86, 179, 0.8);
+  }
+
+  h2.section-title {
+    text-align: center;
+    color: #111;
+    font-weight: 800;
+    margin-bottom: 25px;
+    font-size: 2.2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .why-adopt-section {
+    margin: 90px auto;
+    max-width: 800px;
+    padding: 0 20px;
+    color: #333;
+    font-size: 1.3rem;
+    line-height: 2;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+  }
+
+  .why-adopt-section h2 {
+    font-weight: 900;
+    margin-bottom: 28px;
+    color: #111;
+    font-size: 2.2rem;
+  }
+
+  .help-section {
+    max-width: 950px;
+    margin: 0 auto 90px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .help-section h2 {
+    font-weight: 900;
+    color: #111;
+    margin-bottom: 35px;
+    text-align: center;
+    font-size: 2.2rem;
+  }
+
+  .help-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 35px;
+  }
+
+  .help-card {
+    flex: 1 1 280px;
+    padding: 35px 30px;
+    border-radius: 22px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .help-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  }
+
+  .help-card h3 {
+    color: #555;
+    margin-bottom: 18px;
+    font-weight: 800;
+    font-size: 1.5rem;
+  }
+
+  .help-card p {
+    color: #333;
+    font-size: 1.15rem;
+    line-height: 1.6;
+  }
+
+  .help-doe {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  }
+
+  .help-volunteer {
+    background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+  }
+
+  .help-share {
+    background: linear-gradient(135deg, #c1dfc4 0%, #deecdd 100%);
+  }
+  .intro-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  max-width: 1100px;
+  margin: 0 auto 70px auto;
+  padding: 0 20px;
+  flex-wrap: wrap;
+}
+
+.intro-text {
+  flex: 1;
+  max-width: 500px;
+  font-size: 1.6rem;
+  color: #333;
+  line-height: 1.7;
+  text-align: justify;
+  text-justify: inter-word;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.intro-image {
+  flex: 1;
+  min-width: 280px;
+  max-width: 500px;
+}
+
+.intro-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+}
+</style>
+
+<h1 class="main-title">Adote um Aumigo Hoje!</h1>
+
+<div class="intro-section">
+  <div class="intro-text">
+    <p>Somos apaixonados por conectar pessoas a animais que precisam de um lar.</p>
+    <p>Conheça nossos pets disponíveis para adoção e transforme vidas com amor e responsabilidade.</p>
+  </div>
+  <div class="intro-image">
+    <img src="{% static 'img/banner.jpg' %}" alt="Ilustração de adoção" />
+  </div>
+</div>
+
+<h2 class="section-title">🐾 Aumigos em Destaque</h2>
+<div class="pets-carousel">
+  {% for pet in pets|slice:":5" %}
+  <div class="pet-card">
+    {% if pet.foto %}
+    <img src="{{ pet.foto.url }}" alt="Foto de {{ pet.nome }}" class="pet-image">
+    {% else %}
+    <div class="pet-no-photo">Sem Foto</div>
+    {% endif %}
+    <h3 class="pet-name">{{ pet.nome }}</h3>
+    <p class="pet-info"><strong>Raça:</strong> {{ pet.raca }}</p>
+    <p class="pet-info"><strong>Idade:</strong> {{ pet.idade }} anos</p>
+    <a href="{% url 'pet_detalhe' pet.id %}" class="btn-details">Ver mais</a>
+  </div>
+  {% endfor %}
+</div>
+
+<section class="why-adopt-section">
+  <h2>💖 Por que Adotar? 💖</h2>
+  <p>Adotar um animal é um gesto de empatia e amor. Ao abrir seu lar para um pet, você salva uma vida e enche a sua de
+    carinho incondicional.</p>
+</section>
+
+<section class="help-section">
+  <h2>✨ Como Você Pode Ajudar ✨</h2>
+  <div class="help-cards">
+    <div class="help-card help-doe">
+      <h3>1. Doe</h3>
+      <p>Contribua com ração, medicamentos ou valores para os cuidados dos nossos animais.</p>
+    </div>
+    <div class="help-card help-volunteer">
+      <h3>2. Seja Voluntário</h3>
+      <p>Ajude em feiras, cuidados, abrigo ou divulgação para encontrar lares amorosos.</p>
+    </div>
+    <div class="help-card help-share">
+      <h3>3. Compartilhe</h3>
+      <p>Divulgue nossos peludinhos nas redes sociais para ampliar suas chances de adoção.</p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

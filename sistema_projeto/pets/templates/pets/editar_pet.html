@@ -1,0 +1,124 @@
+{% extends 'pets/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Editar Pet{% endblock %}
+
+{% block content %}
+<div style="
+    max-width: 850px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+">
+    <h2 style="font-weight: 900; font-size: 2.8rem; margin-bottom: 25px; color: #222;">
+        Editar Pet
+    </h2>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div style="display: flex; gap: 40px;">
+            <!-- Campos texto à esquerda -->
+            <div style="flex: 1;">
+                <div class="mb-4">
+                    <label for="{{ form.nome.id_for_label }}" class="form-label fw-semibold">Nome:</label>
+                    {{ form.nome|add_class:"form-control form-control-lg shadow-sm" }}
+                    {% if form.nome.errors %}
+                    <div class="text-danger mt-1 small">{{ form.nome.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.idade.id_for_label }}" class="form-label fw-semibold">Idade:</label>
+                    {{ form.idade|add_class:"form-control form-control-lg shadow-sm" }}
+                    {% if form.idade.errors %}
+                    <div class="text-danger mt-1 small">{{ form.idade.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.especie.id_for_label }}" class="form-label fw-semibold">Espécie:</label>
+                    {{ form.especie|add_class:"form-control form-control-lg shadow-sm" }}
+                    {% if form.especie.errors %}
+                    <div class="text-danger mt-1 small">{{ form.especie.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.raca.id_for_label }}" class="form-label fw-semibold">Raça:</label>
+                    {{ form.raca|add_class:"form-control form-control-lg shadow-sm" }}
+                    {% if form.raca.errors %}
+                    <div class="text-danger mt-1 small">{{ form.raca.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Aqui o textarea descrição -->
+                <div class="mb-4">
+                    <label for="{{ form.descricao.id_for_label }}" class="form-label fw-semibold">Descrição:</label>
+                    {{ form.descricao|add_class:"form-control form-control-lg shadow-sm descricao-textarea" }}
+                    {% if form.descricao.errors %}
+                    <div class="text-danger mt-1 small">{{ form.descricao.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Imagem à direita -->
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                {% if pet.foto %}
+                <div style="max-width: 100%; max-height: 350px; overflow: hidden; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.15);">
+                    <img src="{{ pet.foto.url }}" alt="Foto do pet {{ pet.nome }}" style="width: 100%; height: auto; display: block; object-fit: contain;">
+                </div>
+                {% else %}
+                <div style="width: 100%; height: 350px; display: flex; justify-content: center; align-items: center; border: 2px dashed #ccc; border-radius: 12px; color: #aaa;">
+                    Nenhuma foto disponível
+                </div>
+                {% endif %}
+
+                <div style="width: 100%;">
+                    <label for="{{ form.foto.id_for_label }}" class="form-label fw-semibold">Alterar Foto:</label>
+                    <input type="file" name="{{ form.foto.html_name }}" id="{{ form.foto.id_for_label }}" class="form-control form-control-lg shadow-sm">
+                    {% if form.foto.errors %}
+                    <div class="text-danger mt-1 small">{{ form.foto.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm" style="font-weight: 700; margin-top: 10px;">
+            Atualizar
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .descricao-textarea {
+        min-height: 38px;       /* altura de 1 linha */
+        max-height: 300px;      /* limite máximo de crescimento */
+        overflow-y: hidden;     /* esconde a barra de rolagem */
+        resize: none;           /* impede redimensionamento manual */
+        box-sizing: border-box; /* evita overflow ao mudar altura */
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.querySelector('.descricao-textarea');
+    if (!textarea) return;
+
+    function ajustarAltura() {
+        textarea.style.height = 'auto';          // zera para calcular o scrollHeight correto
+        textarea.style.height = textarea.scrollHeight + 'px'; // seta altura para o conteúdo
+    }
+
+    textarea.addEventListener('input', ajustarAltura);
+    ajustarAltura(); // ajustar altura inicial, caso já tenha conteúdo
+});
+</script>
+{% endblock %}
