@@ -42,13 +42,15 @@ def remover_pet(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
     if request.method == 'POST':
         pet.delete()
-        return redirect('listar_pets')  # Aqui deve estar o nome correto da url
+        return redirect('listar_pets')
     context = {'pet': pet}
     return render(request, 'pets/remover_pet.html', context)
+
 
 def pet_detalhe(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
     return render(request, 'pets/pet_detalhe.html', {'pet': pet})
+
 
 def gerenciar_pets(request):
     pets = Pet.objects.all()
@@ -68,4 +70,8 @@ def gerenciar_pets(request):
     return render(request, 'pets/gerenciar_pets.html', context)
 
 
+# ✅ NOVA VIEW PARA ADOÇÃO
+def listar_animais_disponiveis(request):
+    pets = Pet.objects.all()  # Você pode filtrar por status no futuro, como "disponível"
+    return render(request, 'pets/listar_animais.html', {'pets': pets})
 

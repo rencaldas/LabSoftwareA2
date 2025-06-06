@@ -3,11 +3,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('sistema_projeto.pets.urls')),  
-    path('contas/', include('sistema_projeto.contas.urls')),         
+    path('', include('sistema_projeto.pets.urls')),  # Inclui as URLs do app pets
+    path('contas/', include('sistema_projeto.contas.urls')),  # Inclui as URLs do app contas
 ]
 
 if settings.DEBUG:
