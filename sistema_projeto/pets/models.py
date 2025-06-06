@@ -10,3 +10,14 @@ class Pet(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class Adocao(models.Model):
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='adocoes')
+    nome_adotante = models.CharField(max_length=100)
+    email_adotante = models.EmailField()
+    cpf_adotante = models.CharField(max_length=14)  # CPF com máscara, ex: 000.000.000-00
+    data_adocao = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Adoção de {self.pet.nome} por {self.nome_adotante}"

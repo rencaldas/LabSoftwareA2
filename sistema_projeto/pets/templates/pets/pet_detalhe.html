@@ -37,6 +37,26 @@
     </p>
     {% endif %}
 
+    <!-- BOTÃO ADOTAR -->
+    <a href="{% url 'adotar_pet' pet.id %}" style="
+        display: inline-block;
+        padding: 14px 28px;
+        background-color: #28a745;
+        color: white;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        box-shadow: 0 7px 18px rgba(40,167,69,0.6);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 25px;
+    " onmouseover="this.style.backgroundColor='#1e7e34'; this.style.boxShadow='0 10px 25px rgba(30,126,52,0.8)';"
+       onmouseout="this.style.backgroundColor='#28a745'; this.style.boxShadow='0 7px 18px rgba(40,167,69,0.6)';">
+       Adotar
+    </a>
+
+    <br>
+
     <a href="{% url 'listar_pets' %}" style="
          display: inline-block;
          padding: 12px 24px;
