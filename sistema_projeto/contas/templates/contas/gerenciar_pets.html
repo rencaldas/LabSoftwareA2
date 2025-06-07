@@ -5,7 +5,7 @@
 {% block extra_css %}
 <style>
   th.acoes-header {
-    width: 130px; /* Largura reduzida para a coluna Ações */
+    width: 130px;
     text-align: center;
     vertical-align: middle;
   }
@@ -13,22 +13,56 @@
   td.acoes {
     text-align: center;
     vertical-align: middle;
-    white-space: nowrap; /* impede quebra de linha nos botões */
   }
 
-  td.acoes .btn {
-    font-size: 0.9rem;
-    padding: 0.35rem 0.7rem;
-    margin: 0 3px; /* margem pequena entre os botões */
+  .acoes-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .acoes-buttons .btn {
+    width: 110px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+  }
+
+  .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+  }
+
+  .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+
+  th:nth-child(2), td:nth-child(2) {
+    padding: 0;
+    vertical-align: middle;
+    text-align: center;
   }
 
   h2 {
     margin-top: 20px;
-    margin-bottom: 30px; /* aumenta o espaço abaixo do título */
-    letter-spacing: 1.5px; /* espaço entre letras */
-    /* Se quiser espaçamento entre palavras, pode usar word-spacing */
+    margin-bottom: 30px;
+    letter-spacing: 1.5px;
   }
-
 </style>
 {% endblock %}
 
@@ -41,7 +75,6 @@
   </a>
 </div>
 
-<!-- Lista de Pets -->
 <table class="table table-striped table-bordered align-middle">
   <thead class="table-dark">
     <tr>
@@ -60,7 +93,7 @@
       <td>{{ pet.id }}</td>
       <td>
         {% if pet.foto %}
-          <img src="{{ pet.foto.url }}" alt="Foto do {{ pet.nome }}" style="max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 8px;">
+          <img src="{{ pet.foto.url }}" alt="Foto do {{ pet.nome }}" style="max-width: 140px; max-height: 140px; object-fit: cover; border-radius: 8px;">
         {% else %}
           <span class="text-muted">Sem foto</span>
         {% endif %}
@@ -68,11 +101,12 @@
       <td>{{ pet.nome }}</td>
       <td>{{ pet.especie }}</td>
       <td>{{ pet.raca }}</td>
-      <td>{{ pet.dono.username }}</td>
+      <td>{{ pet.adotante|default:"Nenhum" }}</td>
       <td class="acoes">
-        <a href="{% url 'editar_pet' pet.id %}" class="btn btn-warning">Editar</a>
-        <a href="{% url 'remover_pet' pet.id %}" class="btn btn-danger"
-           onclick="return confirm('Tem certeza que deseja remover este pet?');">Remover</a>
+        <div class="acoes-buttons">
+          <a href="{% url 'editar_pet' pet.id %}" class="btn btn-warning">Editar</a>
+          <a href="{% url 'remover_pet' pet.id %}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja remover este pet?');">Remover</a>
+        </div>
       </td>
     </tr>
     {% empty %}
@@ -82,5 +116,4 @@
     {% endfor %}
   </tbody>
 </table>
-
 {% endblock %}

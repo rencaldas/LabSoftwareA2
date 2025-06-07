@@ -4,35 +4,38 @@
 
 {% block content %}
 <div style="
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 30px;
+    max-width: 400px;   /* Diminuído de 600px para 400px */
+    margin: 20px auto;
+    padding: 15px 20px; /* leve ajuste no padding */
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.12);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
 ">
-    <h1 style="font-weight: 900; font-size: 3rem; margin-bottom: 25px; color: #222;">
+    <h1 style="font-weight: 900; font-size: 2.5rem; margin-bottom: 25px; color: #222;">
         {{ pet.nome }}
     </h1>
 
     {% if pet.foto %}
     <img src="{{ pet.foto.url }}" alt="Foto de {{ pet.nome }}" style="
+        display: block;
         width: 100%;
-        max-height: 400px;
+        max-height: 300px;  /* diminuiu de 400px */
         object-fit: cover;
         border-radius: 15px;
         box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         margin-bottom: 30px;
+        margin-left: auto;
+        margin-right: auto;
       ">
     {% endif %}
 
-    <p style="font-size: 1.2rem; margin-bottom: 10px;"><strong>Raça:</strong> {{ pet.raca }}</p>
-    <p style="font-size: 1.2rem; margin-bottom: 20px;"><strong>Idade:</strong> {{ pet.idade }} anos</p>
+    <p style="font-size: 1.1rem; margin-bottom: 10px;"><strong>Raça:</strong> {{ pet.raca }}</p>
+    <p style="font-size: 1.1rem; margin-bottom: 20px;"><strong>Idade:</strong> {{ pet.idade }} anos</p>
 
     {% if pet.descricao %}
-    <p style="font-size: 1.15rem; line-height: 1.6; margin-bottom: 30px; color: #555;">
+    <p style="font-size: 1rem; line-height: 1.5; margin-bottom: 30px; color: #555;">
         <strong>Descrição:</strong><br> {{ pet.descricao }}
     </p>
     {% endif %}
@@ -40,7 +43,7 @@
     <!-- BOTÃO ADOTAR -->
     <a href="{% url 'adotar_pet' pet.id %}" style="
         display: inline-block;
-        padding: 14px 28px;
+        padding: 12px 24px; /* ligeiramente menor */
         background-color: #28a745;
         color: white;
         border-radius: 12px;
@@ -59,7 +62,7 @@
 
     <a href="{% url 'listar_pets' %}" style="
          display: inline-block;
-         padding: 12px 24px;
+         padding: 10px 20px;  /* ligeiramente menor */
          background-color: #007bff;
          color: white;
          border-radius: 12px;

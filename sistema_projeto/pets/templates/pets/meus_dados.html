@@ -1,0 +1,37 @@
+{% extends 'pets/base.html' %}
+
+{% block title %}Meus Dados{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h3 class="mb-4 text-primary">Meus Dados</h3>
+
+        <p><strong>Usuário:</strong> 
+          {% if user.username and user.username != user.email %}
+            {{ user.username }}
+          {% else %}
+            <span class="text-muted">Não informado</span>
+          {% endif %}
+        </p>
+
+        <p><strong>Nome completo:</strong> 
+          {% if user.get_full_name %}
+            {{ user.get_full_name }}
+          {% else %}
+            <span class="text-muted">Defina um</span>
+          {% endif %}
+        </p>
+
+        <p><strong>Email:</strong> {{ user.email }}</p>
+
+        <a href="{% url 'editar_dados' %}" class="btn btn-outline-primary mt-4 w-100">
+          <i class="bi bi-pencil-square me-2"></i>Editar meus dados
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

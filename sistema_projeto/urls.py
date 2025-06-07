@@ -5,8 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('sistema_projeto.pets.urls')),  # Inclui as URLs do app pets
-    path('contas/', include('sistema_projeto.contas.urls')),  # Inclui as URLs do app contas
+    path('', include('sistema_projeto.pets.urls')),
+    path('contas/', include('sistema_projeto.contas.urls')),
 ]
 
 if settings.DEBUG:

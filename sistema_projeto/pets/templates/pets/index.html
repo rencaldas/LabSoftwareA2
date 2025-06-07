@@ -237,19 +237,20 @@
 }
 </style>
 
-<h1 class="main-title">Adote um Aumigo Hoje!</h1>
+<h1 class="main-title">🐶 Adote um Aumigo Hoje! 🐶</h1>
 
 <div class="intro-section">
   <div class="intro-text">
-    <p>Somos apaixonados por conectar pessoas a animais que precisam de um lar.</p>
-    <p>Conheça nossos pets disponíveis para adoção e transforme vidas com amor e responsabilidade.</p>
+    <p>Somos apaixonados por conectar pessoas a animais que precisam de um lar!</p>
+    <p>Conheça nossos pets disponíveis para adoção e transforme vidas com muito amor e responsabilidade. Também oferecemos 
+      serviços de banho e tosa para seu melhor amigo!</p>
   </div>
   <div class="intro-image">
     <img src="{% static 'img/banner.jpg' %}" alt="Ilustração de adoção" />
   </div>
 </div>
 
-<h2 class="section-title">🐾 Aumigos em Destaque</h2>
+<h2 class="section-title">🐾 Aumigos em Destaque 🐾</h2>
 <div class="pets-carousel">
   {% for pet in pets|slice:":5" %}
   <div class="pet-card">
@@ -265,6 +266,12 @@
   </div>
   {% endfor %}
 </div>
+
+<style>
+  .pet-card {
+    margin: 0;
+  }
+</style>
 
 <section class="why-adopt-section">
   <h2>💖 Por que Adotar? 💖</h2>

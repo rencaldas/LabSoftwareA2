@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Pet
-from .forms import PetForm, AdocaoForm  # Importa também o novo formulário
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib import messages
+from .models import Pet, Adocao
+from .forms import PetForm, AdocaoForm, CustomUserChangeForm
 
 def index(request):
     pets = Pet.objects.all()
@@ -27,7 +30,7 @@ def editar_pet(request, pet_id):
         form = PetForm(request.POST, request.FILES, instance=pet)
         if form.is_valid():
             form.save()
-            return redirect('listar_pets')
+            return redirect('gerenciar_pets')  # Alterado aqui para redirecionar para a página de gerenciamento
     else:
         form = PetForm(instance=pet)
 
@@ -62,37 +65,77 @@ def gerenciar_pets(request):
     }
     return render(request, 'pets/gerenciar_pets.html', context)
 
-# Sua view existente para listar animais na página "Adotar"
 def listar_animais_disponiveis(request):
     pets = Pet.objects.all()
     return render(request, 'pets/listar_animais.html', {'pets': pets})
 
-# ================================
-# NOVA VIEW para exibir e processar o formulário de adoção
+@login_required
 def adotar_pet(request, pet_id):
     pet = get_object_or_404(Pet, id=pet_id)
 
     if request.method == 'POST':
-        form = AdocaoForm(request.POST)
+        form = AdocaoForm(request.POST, request.FILES)
         if form.is_valid():
-            # Aqui você pode salvar os dados em banco se desejar (próxima etapa)
+            adocao = form.save(commit=False)
+            adocao.pet = pet
+            adocao.usuario = request.user
+            adocao.email_adotante = request.user.email
+            adocao.save()
+
+            if hasattr(pet, 'disponivel'):
+                pet.disponivel = False
+                pet.save()
+
             return render(request, 'pets/adocao_sucesso.html', {'pet': pet})
+        else:
+            return render(request, 'pets/adotar_pet.html', {
+                'form': form,
+                'pet': pet,
+                'form_errors': form.errors,
+            })
     else:
         form = AdocaoForm()
 
     return render(request, 'pets/adotar_pet.html', {'form': form, 'pet': pet})
 
-def adotar_pet(request, pet_id):
-    pet = get_object_or_404(Pet, id=pet_id)
+@login_required
+def meus_dados(request):
+    return render(request, 'pets/meus_dados.html')
+
+@login_required
+def meus_aumigos(request):
+    aumigos = Adocao.objects.filter(email_adotante=request.user.email).select_related('pet')
+    context = {
+        'aumigos': aumigos,
+    }
+    return render(request, 'pets/meus_aumigos.html', context)
+
+@login_required
+def editar_dados(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Seus dados foram atualizados com sucesso.')
+            return redirect('meus_dados')
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+
+    return render(request, 'pets/editar_dados.html', {'form': form})
+
+@login_required
+def cancelar_adocao(request, adocao_id):
+    adocao = get_object_or_404(Adocao, id=adocao_id)
+
+    # Verifica se o usuário atual é o dono da adoção
+    if adocao.email_adotante != request.user.email:
+        messages.error(request, 'Você não tem permissão para cancelar esta adoção.')
+        return redirect('meus_aumigos')
 
     if request.method == 'POST':
-        form = AdocaoForm(request.POST)
-        if form.is_valid():
-            # Aqui, você pode salvar os dados ou enviar email
-            return render(request, 'pets/adocao_sucesso.html', {'pet': pet})
-    else:
-        form = AdocaoForm()
+        adocao.delete()
+        messages.success(request, 'Adoção cancelada com sucesso.')
+        return redirect('meus_aumigos')
 
-    return render(request, 'pets/adotar_pet.html', {'form': form, 'pet': pet})
-
-
+    # Se quiser, pode criar um template para confirmar o cancelamento
+    return render(request, 'pets/cancelar_adocao_confirmar.html', {'adocao': adocao})
