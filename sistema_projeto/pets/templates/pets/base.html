@@ -44,7 +44,7 @@
         
 
         /* --- MENU ESTILIZADO --- */
-        .navbar {
+        .navbar { 
             padding: 14px 0;
             background: linear-gradient(90deg, #111, #222);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -97,53 +97,21 @@
             background-color: rgba(255, 0, 0, 0.4);
         }
 
-        .dropdown-menu {
-            background: linear-gradient(180deg, #111, #222);
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-            min-width: 180px;
-            padding: 8px 0;
-            font-weight: 500;
+        .peido {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
         }
 
-        .dropdown-item {
-            color: #ccc;
-            padding: 10px 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            border-radius: 6px;
-        }
-
-        .dropdown-item:hover,
-        .dropdown-item:focus {
-            background-color: rgba(0, 123, 255, 0.3);
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .dropdown-divider {
-            border-color: rgba(255, 255, 255, 0.1);
-            margin: 6px 0;
-        }
-
-        .navbar-dark .navbar-nav .nav-link.dropdown-toggle {
-            padding: 8px 16px;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.05);
-            transition: background-color 0.3s ease;
-        }
-
-        .navbar-dark .navbar-nav .nav-link.dropdown-toggle:hover,
-        .navbar-dark .navbar-nav .nav-link.dropdown-toggle:focus {
-            background-color: rgba(0, 123, 255, 0.3);
-            color: #fff;
-        }
     </style>
 </head>
 
 <body>
 
     <!-- Menu de navegação estilizado -->
+<div class="peido"> 
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'index' %}">AuMigos Petshop</a>
@@ -190,7 +158,7 @@
             </div>
         </div>
     </nav>
-
+</div>
     <!-- Conteúdo principal -->
     <div class="content-wrapper">
         <div class="container">
