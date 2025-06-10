@@ -252,7 +252,7 @@
 
 <h2 class="section-title">🐾 Aumigos em Destaque 🐾</h2>
 <div class="pets-carousel">
-  {% for pet in pets|slice:":5" %}
+  {% for pet in pets|slice:":10" %}
   <div class="pet-card">
     {% if pet.foto %}
     <img src="{{ pet.foto.url }}" alt="Foto de {{ pet.nome }}" class="pet-image">

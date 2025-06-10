@@ -25,6 +25,7 @@
 
         .content-wrapper {
             flex: 1;
+            padding-top: 64px;
         }
 
         footer {
@@ -33,29 +34,33 @@
             color: #eee;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.3);
-
             bottom: 0;
-            width: 100%;
-            height: 60px; 
+            height: 60px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        
 
-        /* --- MENU ESTILIZADO --- */
-        .navbar { 
+        /* --- MENU ESTILIZADO PETSHOP --- */
+        .navbar {
             padding: 14px 0;
-            background: linear-gradient(90deg, #111, #222);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(90deg, #ffe5b4, #ffd1dc); /* bege claro a rosa pastel */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand {
-            font-size: 1.5rem;
-            color: #fff !important;
+            font-size: 1.7rem;
+            color: #5a3e2b !important;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand::before {
+            content: "🐾";
+            margin-right: 8px;
         }
 
         .navbar-nav .nav-item {
@@ -64,23 +69,26 @@
         }
 
         .nav-link-custom {
-            color: #ccc !important;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+            color: #5a3e2b !important;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
             padding: 8px 16px;
             transition: all 0.3s ease;
             font-weight: 500;
         }
 
         .nav-link-custom:hover {
-            color: #fff !important;
-            background-color: rgba(0, 123, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.6);
+            color: #3d2b1f !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .nav-link.text-light {
-            padding: 8px 16px;
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: rgba(255, 255, 255, 0.4);
+            color: #5a3e2b !important;
             border-radius: 8px;
+            padding: 8px 16px;
             margin-left: 10px;
             margin-right: 10px;
             cursor: default;
@@ -89,12 +97,13 @@
         .nav-link.text-danger {
             padding: 8px 16px;
             border-radius: 8px;
-            background-color: rgba(255, 0, 0, 0.2);
+            background-color: rgba(255, 100, 100, 0.2);
+            color: #a94442 !important;
             transition: background-color 0.3s ease;
         }
 
         .nav-link.text-danger:hover {
-            background-color: rgba(255, 0, 0, 0.4);
+            background-color: rgba(255, 100, 100, 0.4);
         }
 
         .peido {
@@ -104,61 +113,67 @@
             width: 100%;
             z-index: 999;
         }
-
     </style>
 </head>
 
 <body>
 
     <!-- Menu de navegação estilizado -->
-<div class="peido"> 
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">AuMigos Petshop</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <div class="peido">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'index' %}">AuMigos Petshop</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Links à esquerda -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="{% url 'listar_pets' %}">Adotar Aumigos</a>
-                    </li>
-                </ul>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <!-- Links à esquerda -->
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" href="{% url 'listar_pets' %}">Adotar Aumigos</a>
+                        </li>
+                    </ul>
 
-                <!-- Links à direita -->
-                <ul class="navbar-nav ms-auto">
-                    {% if user.is_authenticated and user.email in ADMIN_EMAILS %}
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="{% url 'gerenciar_pets' %}">Gerenciar</a>
-                    </li>
-                    {% endif %}
+                    <!-- Links à direita -->
+                    <ul class="navbar-nav ms-auto">
+                        {% if user.is_authenticated and user.email in ADMIN_EMAILS %}
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" href="{% url 'gerenciar_pets' %}">Gerenciar</a>
+                        </li>
+                        {% endif %}
 
-                    {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-light" href="#" id="userDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                            Olá, <strong>{{ user.email }}</strong>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{% url 'meus_dados' %}">Meus Dados</a></li>
-                            <li><a class="dropdown-item" href="{% url 'meus_aumigos' %}">Meus Aumigos</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a></li>
-                        </ul>
-                    </li>
-                    {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="{% url 'login' %}">Login/Cadastro</a>
-                    </li>
-                    {% endif %}
-                </ul>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="userDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                                Olá, <strong>
+                                    {% if user.username and user.username != user.email %}
+                                        {{ user.username }}
+                                    {% else %}
+                                        {{ user.email }}
+                                    {% endif %}
+                                </strong>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{% url 'meus_dados' %}">Meus Dados</a></li>
+                                <li><a class="dropdown-item" href="{% url 'meus_aumigos' %}">Meus Aumigos</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Sair</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" href="{% url 'login' %}">Login/Cadastro</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</div>
+        </nav>
+    </div>
+
     <!-- Conteúdo principal -->
     <div class="content-wrapper">
         <div class="container">
@@ -169,7 +184,7 @@
 
     <!-- Rodapé -->
     <footer>
-    © 2025 PetShop. Todos os direitos reservados.
+        © 2025 PetShop. Todos os direitos reservados.
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

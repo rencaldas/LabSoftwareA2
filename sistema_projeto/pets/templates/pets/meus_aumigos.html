@@ -8,15 +8,22 @@
   .card-footer {
     display: flex !important;
     flex-direction: column;
-    align-items: center; /* centraliza horizontalmente */
-    gap: 10px; /* margem leve entre os botões */
+    align-items: center;
+    gap: 10px;
   }
 
-  /* Para garantir que os botões tenham largura consistente e fiquem retangulares */
   .card-footer .btn {
     width: 150px;
     font-weight: 900;
     padding: 10px 0;
+  }
+
+  .btn-arredondado {
+    border-radius: 12px !important;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    width: 100%;
   }
 </style>
 
@@ -40,7 +47,6 @@
             <p class="card-text"><strong>Espécie:</strong> {{ adocao.pet.especie }}</p>
           </div>
           <div class="card-footer">
-            <!-- Botão que abre modal com detalhes -->
             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detalhePetModal{{ adocao.pet.id }}">
               Ver detalhes
             </button>
@@ -116,21 +122,20 @@
       <div class="modal-body" style="text-align: center;">
         <p>Tem certeza que deseja cancelar esta adoção?</p>
       </div>
-      <div class="modal-footer" style="display: flex; gap: 10px; padding: 0;">
+      <div class="modal-footer" style="display: flex; gap: 10px; padding: 0 20px 20px;">
         <form id="formCancelarAdocao" method="post" style="flex: 1; margin: 0;">
           {% csrf_token %}
-          <button type="submit" class="btn btn-danger" style="width: 100%; border-radius: 0; font-weight: 700; padding: 12px 0;">
+          <button type="submit" class="btn btn-danger btn-arredondado">
             Cancelar
           </button>
         </form>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="flex: 1; border-radius: 0; font-weight: 700; padding: 12px 0;">
+        <button type="button" class="btn btn-secondary btn-arredondado" data-bs-dismiss="modal">
           Não
         </button>
       </div>
     </div>
   </div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}
@@ -140,7 +145,7 @@
   function abrirConfirmacaoCancelamento(adocaoId) {
     cancelarAdocaoId = adocaoId;
     const form = document.getElementById('formCancelarAdocao');
-    form.action = `/cancelar-adocao/${adocaoId}/`;  // Ajuste conforme sua url padrão
+    form.action = `/cancelar-adocao/${adocaoId}/`;
     const cancelarModal = new bootstrap.Modal(document.getElementById('confirmarCancelamentoModal'));
     cancelarModal.show();
   }

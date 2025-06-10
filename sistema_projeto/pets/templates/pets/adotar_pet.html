@@ -19,6 +19,12 @@
         Excelente escolha! Ele deve ficar bem feliz ao ganhar um novo lar cheio de carinho.
     </p>
 
+    {% if msg_sucesso %}
+    <div class="alert alert-success" role="alert" style="margin-bottom: 20px;">
+      {{ msg_sucesso }}
+    </div>
+    {% endif %}
+
     <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         <div style="display: flex; gap: 40px;">
@@ -99,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Limita a 11 dígitos
       value = value.slice(0, 11);
 
-      // Aplica a máscara
+      // Aplica a máscara CPF: 123.456.789-00
       if (value.length > 9) {
         value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
       } else if (value.length > 6) {
@@ -112,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Máscara para RG
   const rgInput = document.getElementById('rg_input');
 
   if (rgInput) {
@@ -138,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Máscara para Telefone com DDD (ex: (11) 91234-5678)
   const telefoneInput = document.getElementById('telefone_input');
 
   if (telefoneInput) {

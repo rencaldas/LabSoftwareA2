@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
-from .models import Pet, Adocao
+from .models import Pet, Adocao, Perfil
 import re
 
 # =============== FORMULÁRIO PERSONALIZADO PARA EDIÇÃO DE DADOS DO USUÁRIO ===============
@@ -74,3 +74,64 @@ class AdocaoForm(forms.ModelForm):
         if len(telefone_numbers) < 10:
             raise forms.ValidationError("Por favor, informe um telefone válido com DDD e número.")
         return telefone
+
+
+# =============== FORMULÁRIO PARA EDITAR DADOS DO USUÁRIO (Django User) ===============
+
+class UsuarioForm(forms.ModelForm):
+    username = forms.CharField(
+        label='Usuário',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite seu usuário'}),
+        required=True
+    )
+    email = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Digite seu email'}),
+        required=True
+    )
+    first_name = forms.CharField(
+        label='Primeiro Nome:',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite seu nome'}),
+        required=False
+    )
+    last_name = forms.CharField(
+        label='Sobrenome',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite seu sobrenome'}),
+        required=False
+    )
+    cpf = forms.CharField(
+        label='CPF',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite seu CPF'}),
+        required=False,
+    )
+    rg = forms.CharField(
+        label='RG',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite seu RG'}),
+        required=False,
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'email', 'cpf', 'rg']
+
+class PerfilForm(forms.ModelForm):
+    cpf = forms.CharField(
+        label='CPF',
+        max_length=14,
+        widget=forms.TextInput(attrs={
+            'placeholder': '123.456.789-00',
+            'pattern': r'\d{3}\.\d{3}\.\d{3}-\d{2}',
+            'title': 'Digite o CPF no formato 000.000.000-00'
+        }),
+        required=False
+    )
+    rg = forms.CharField(
+        label='RG',
+        max_length=20,
+        widget=forms.TextInput(attrs={'placeholder': '12.345.678-9'}),
+        required=False
+    )
+
+    class Meta:
+        model = Perfil
+        fields = ['cpf', 'rg']
