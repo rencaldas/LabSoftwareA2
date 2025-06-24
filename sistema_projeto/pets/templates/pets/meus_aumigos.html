@@ -1,0 +1,153 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}Meus Aumigos{% endblock %}
+
+{% block content %}
+<style>
+  .card-footer {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-footer .btn {
+    width: 150px;
+    font-weight: 900;
+    padding: 10px 0;
+  }
+
+  .btn-arredondado {
+    border-radius: 12px !important;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    width: 100%;
+  }
+</style>
+
+<div class="container mt-5">
+  <h2 class="mb-4">Meus Aumigos</h2>
+
+  {% if aumigos %}
+  <div class="row">
+    {% for adocao in aumigos %}
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100 d-flex flex-column">
+          {% if adocao.pet.foto %}
+            <img src="{{ adocao.pet.foto.url }}" class="card-img-top" alt="{{ adocao.pet.nome }}">
+          {% else %}
+            <img src="{% static 'pets/img/default_pet.jpg' %}" class="card-img-top" alt="Imagem padrão do pet">
+          {% endif %}
+          <div class="card-body flex-grow-1">
+            <h5 class="card-title">{{ adocao.pet.nome }}</h5>
+            <p class="card-text"><strong>Idade:</strong> {{ adocao.pet.idade }} anos</p>
+            <p class="card-text"><strong>Raça:</strong> {{ adocao.pet.raca }}</p>
+            <p class="card-text"><strong>Espécie:</strong> {{ adocao.pet.especie }}</p>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detalhePetModal{{ adocao.pet.id }}">
+              Ver detalhes
+            </button>
+
+            <form action="{% url 'cancelar_adocao' adocao.id %}" method="post" style="margin: 0;">
+              {% csrf_token %}
+              <button type="button" class="btn btn-danger btn-sm" onclick="abrirConfirmacaoCancelamento({{ adocao.id }})">
+                Cancelar adoção
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de detalhe do pet -->
+      <div class="modal fade" id="detalhePetModal{{ adocao.pet.id }}" tabindex="-1" aria-labelledby="detalhePetModalLabel{{ adocao.pet.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 600px;">
+          <div class="modal-content" style="border-radius: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
+            <div class="modal-header">
+              <h5 class="modal-title" id="detalhePetModalLabel{{ adocao.pet.id }}" style="font-weight: 900; font-size: 1.8rem; color: #222;">
+                {{ adocao.pet.nome }}
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+              {% if adocao.pet.foto %}
+              <img src="{{ adocao.pet.foto.url }}" alt="Foto de {{ adocao.pet.nome }}" style="
+                width: 100%;
+                max-height: 300px;
+                object-fit: cover;
+                border-radius: 15px;
+                box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+              ">
+              {% endif %}
+
+              <p><strong>Nome:</strong> {{ adocao.pet.nome }}</p>
+              <p><strong>Idade:</strong> {{ adocao.pet.idade }} anos</p>
+              <p><strong>Raça:</strong> {{ adocao.pet.raca }}</p>
+              <p><strong>Espécie:</strong> {{ adocao.pet.especie }}</p>
+
+              {% if adocao.pet.descricao %}
+              <p><strong>Descrição:</strong><br>{{ adocao.pet.descricao }}</p>
+              {% endif %}
+            </div>
+            <div class="modal-footer" style="display: flex; gap: 10px; padding: 0;">
+              <a href="{% url 'adotar_pet' adocao.pet.id %}" class="btn btn-success" style="flex: 1; border-radius: 0; font-weight: 700; padding: 12px 0;">
+                Adotar
+              </a>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="flex: 1; border-radius: 0; font-weight: 700; padding: 12px 0;">
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    {% endfor %}
+  </div>
+  {% else %}
+    <p>Você ainda não adotou nenhum pet.</p>
+  {% endif %}
+</div>
+
+<!-- Modal de confirmação de cancelamento -->
+<div class="modal fade" id="confirmarCancelamentoModal" tabindex="-1" aria-labelledby="confirmarCancelamentoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+    <div class="modal-content" style="border-radius: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmarCancelamentoLabel" style="text-align:center; width: 100%; font-weight: 700;">Confirmação de Cancelamento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <p>Tem certeza que deseja cancelar esta adoção?</p>
+      </div>
+      <div class="modal-footer" style="display: flex; gap: 10px; padding: 0 20px 20px;">
+        <form id="formCancelarAdocao" method="post" style="flex: 1; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-arredondado">
+            Cancelar
+          </button>
+        </form>
+        <button type="button" class="btn btn-secondary btn-arredondado" data-bs-dismiss="modal">
+          Não
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  let cancelarAdocaoId = null;
+
+  function abrirConfirmacaoCancelamento(adocaoId) {
+    cancelarAdocaoId = adocaoId;
+    const form = document.getElementById('formCancelarAdocao');
+    form.action = `/cancelar-adocao/${adocaoId}/`;
+    const cancelarModal = new bootstrap.Modal(document.getElementById('confirmarCancelamentoModal'));
+    cancelarModal.show();
+  }
+</script>
+{% endblock %}

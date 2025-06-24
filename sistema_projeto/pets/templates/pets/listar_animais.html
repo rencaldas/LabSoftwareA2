@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="text-center">Animais para Adoção</h1>
+  <div class="row">
+    {% for pet in pets %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img src="{{ pet.foto.url }}" class="card-img-top" alt="Foto de {{ pet.nome }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ pet.nome }}</h5>
+            <p class="card-text">{{ pet.descricao }}</p>
+            <!-- Adicione mais informações conforme necessário -->
+
+            <!-- BOTÃO DE ADOÇÃO -->
+            <a href="{% url 'adotar_pet' pet.id %}" class="btn btn-success mt-2">Adotar</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

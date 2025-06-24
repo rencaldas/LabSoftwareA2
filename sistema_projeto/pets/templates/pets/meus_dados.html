@@ -1,0 +1,107 @@
+{% extends 'pets/base.html' %}
+
+{% block title %}Meus Dados{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+      <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h3 class="mb-4 text-primary">Meus Dados</h3>
+
+        <p><strong>Usuário:</strong> 
+          {% if user.username and user.username != user.email %}
+            {{ user.username }}
+          {% else %}
+            <span class="text-muted">Não informado</span>
+          {% endif %}
+        </p>
+
+        <p><strong>Nome completo:</strong> 
+          {% if user.first_name or user.last_name %}
+            {{ user.first_name }} {{ user.last_name }}
+          {% else %}
+            <span class="text-muted">Não informado</span>
+          {% endif %}
+        </p>
+
+        <!-- Email acima do telefone -->
+        <p><strong>Email:</strong>
+          {% if user.email %}
+            {{ user.email }}
+          {% else %}
+            <span class="text-muted">Não informado</span>
+          {% endif %}
+        </p>
+
+        <!-- Telefone -->
+        <div class="mb-3">
+          <label class="form-label"><strong>Telefone:</strong></label>
+          {% if perfil.telefone %}
+            <p>{{ perfil.telefone }}</p>
+          {% else %}
+            <p class="text-muted">Não informado</p>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label for="cpf_usuario" class="form-label"><strong>CPF:</strong></label>
+          <div class="input-group">
+            <input type="password" id="cpf_usuario" class="form-control" 
+                   value="{{ perfil.cpf|default_if_none:'' }}" readonly>
+            <button class="btn btn-outline-secondary" type="button" id="toggleCpfBtn">Mostrar</button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="rg_usuario" class="form-label"><strong>RG:</strong></label>
+          <div class="input-group">
+            <input type="password" id="rg_usuario" class="form-control" 
+                   value="{{ perfil.rg|default_if_none:'' }}" readonly>
+            <button class="btn btn-outline-secondary" type="button" id="toggleRgBtn">Mostrar</button>
+          </div>
+        </div>
+
+        <a href="{% url 'editar_dados' %}" class="btn btn-outline-primary mt-4 w-100">
+          <i class="bi bi-pencil-square me-2"></i>Editar meus dados
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cpfInput = document.getElementById('cpf_usuario');
+    const toggleCpfBtn = document.getElementById('toggleCpfBtn');
+    const rgInput = document.getElementById('rg_usuario');
+    const toggleRgBtn = document.getElementById('toggleRgBtn');
+
+    if (toggleCpfBtn && cpfInput) {
+      toggleCpfBtn.addEventListener('click', () => {
+        if (cpfInput.type === 'password') {
+          cpfInput.type = 'text';
+          toggleCpfBtn.textContent = 'Esconder';
+        } else {
+          cpfInput.type = 'password';
+          toggleCpfBtn.textContent = 'Mostrar';
+        }
+      });
+    }
+
+    if (toggleRgBtn && rgInput) {
+      toggleRgBtn.addEventListener('click', () => {
+        if (rgInput.type === 'password') {
+          rgInput.type = 'text';
+          toggleRgBtn.textContent = 'Esconder';
+        } else {
+          rgInput.type = 'password';
+          toggleRgBtn.textContent = 'Mostrar';
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

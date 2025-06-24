@@ -1,0 +1,198 @@
+{% extends 'pets/base.html' %}
+
+{% block title %}Editar Dados{% endblock %}
+
+{% block content %}
+<style>
+  .edit-card {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 25px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  label {
+    font-weight: 600;
+    color: #333;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin-top: 5px;
+  }
+
+  .text-danger {
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+
+  .btn {
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .btn-dark {
+    background-color: #333;
+    color: #fff;
+    border: none;
+  }
+
+  .btn-dark:hover {
+    background-color: #111;
+  }
+
+  .btn-secondary {
+    background-color: #ddd;
+    color: #333;
+    border: none;
+  }
+
+  .btn-secondary:hover {
+    background-color: #bbb;
+  }
+</style>
+
+<div class="edit-card">
+  <h3 class="mb-4 text-center">Editar Meus Dados</h3>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <!-- Dados do Usuário -->
+    <div class="form-group">
+      {{ user_form.username.label_tag }}
+      {{ user_form.username }}
+      {% if user_form.username.errors %}
+        <div class="text-danger">{{ user_form.username.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ user_form.first_name.label_tag }}
+      {{ user_form.first_name }}
+      {% if user_form.first_name.errors %}
+        <div class="text-danger">{{ user_form.first_name.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ user_form.last_name.label_tag }}
+      {{ user_form.last_name }}
+      {% if user_form.last_name.errors %}
+        <div class="text-danger">{{ user_form.last_name.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ user_form.email.label_tag }}
+      {{ user_form.email }}
+      {% if user_form.email.errors %}
+        <div class="text-danger">{{ user_form.email.errors }}</div>
+      {% endif %}
+    </div>
+
+    <hr>
+
+    <!-- Dados Pessoais -->
+    <div class="form-group">
+      <label for="{{ perfil_form.cpf.id_for_label }}">{{ perfil_form.cpf.label }}</label>
+      <input
+        type="text"
+        name="{{ perfil_form.cpf.html_name }}"
+        id="{{ perfil_form.cpf.id_for_label }}"
+        value="{{ perfil_form.cpf.value|default_if_none:'' }}"
+        placeholder="123.456.789-00"
+        maxlength="14"
+        class="form-control"
+        oninput="mascaraCPF(this)"
+      >
+      {% if perfil_form.cpf.errors %}
+        <div class="text-danger">{{ perfil_form.cpf.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ perfil_form.rg.id_for_label }}">{{ perfil_form.rg.label }}</label>
+      <input
+        type="text"
+        name="{{ perfil_form.rg.html_name }}"
+        id="{{ perfil_form.rg.id_for_label }}"
+        value="{{ perfil_form.rg.value|default_if_none:'' }}"
+        placeholder="12.345.678-9"
+        maxlength="12"
+        class="form-control"
+        oninput="mascaraRG(this)"
+      >
+      {% if perfil_form.rg.errors %}
+        <div class="text-danger">{{ perfil_form.rg.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ perfil_form.telefone.id_for_label }}">{{ perfil_form.telefone.label }}</label>
+      <input
+        type="text"
+        name="{{ perfil_form.telefone.html_name }}"
+        id="{{ perfil_form.telefone.id_for_label }}"
+        value="{{ perfil_form.telefone.value|default_if_none:'' }}"
+        placeholder="(21) 91234-5678"
+        maxlength="15"
+        class="form-control"
+        oninput="mascaraTelefone(this)"
+      >
+      {% if perfil_form.telefone.errors %}
+        <div class="text-danger">{{ perfil_form.telefone.errors }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-dark w-100 mt-2">Salvar</button>
+    <a href="{% url 'meus_dados' %}" class="btn btn-secondary mt-2 w-100">Cancelar</a>
+  </form>
+</div>
+
+<script>
+  function mascaraCPF(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    input.value = v;
+  }
+
+  function mascaraRG(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 9) v = v.slice(0, 9);
+    v = v.replace(/(\d{2})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1})$/, '$1-$2');
+    input.value = v;
+  }
+
+  function mascaraTelefone(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
+    if (v.length <= 13) {
+      v = v.replace(/(\d{4})(\d{1,4})$/, '$1-$2');
+    } else {
+      v = v.replace(/(\d{5})(\d{4})$/, '$1-$2');
+    }
+    input.value = v;
+  }
+</script>
+{% endblock %}

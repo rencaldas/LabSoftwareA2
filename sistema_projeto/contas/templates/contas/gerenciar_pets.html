@@ -1,0 +1,119 @@
+{% extends 'pets/base.html' %}
+
+{% block title %}Gerenciar Pets{% endblock %}
+
+{% block extra_css %}
+<style>
+  th.acoes-header {
+    width: 130px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  td.acoes {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .acoes-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .acoes-buttons .btn {
+    width: 110px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+  }
+
+  .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+  }
+
+  .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+
+  th:nth-child(2), td:nth-child(2) {
+    padding: 0;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  h2 {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    letter-spacing: 1.5px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2 style="text-align:center; margin-bottom: 20px; margin-top:20px; font-weight: bold; font-size: 3rem;">Gerenciar Pets</h2>
+
+<div class="mb-4" style="text-align: center;">
+  <a href="{% url 'cadastrar_pet' %}" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 1.1rem; font-weight: 600;">
+    Cadastrar Novo Pet
+  </a>
+</div>
+
+<table class="table table-striped table-bordered align-middle">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Foto</th>
+      <th>Nome</th>
+      <th>Espécie</th>
+      <th>Raça</th>
+      <th>Dono</th>
+      <th class="acoes-header">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pet in pets %}
+    <tr>
+      <td>{{ pet.id }}</td>
+      <td>
+        {% if pet.foto %}
+          <img src="{{ pet.foto.url }}" alt="Foto do {{ pet.nome }}" style="max-width: 140px; max-height: 140px; object-fit: cover; border-radius: 8px;">
+        {% else %}
+          <span class="text-muted">Sem foto</span>
+        {% endif %}
+      </td>
+      <td>{{ pet.nome }}</td>
+      <td>{{ pet.especie }}</td>
+      <td>{{ pet.raca }}</td>
+      <td>{{ pet.adotante|default:"Nenhum" }}</td>
+      <td class="acoes">
+        <div class="acoes-buttons">
+          <a href="{% url 'editar_pet' pet.id %}" class="btn btn-warning">Editar</a>
+          <a href="{% url 'remover_pet' pet.id %}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja remover este pet?');">Remover</a>
+        </div>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="7" class="text-center">Nenhum pet cadastrado.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

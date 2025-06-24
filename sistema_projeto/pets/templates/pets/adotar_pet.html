@@ -1,0 +1,171 @@
+{% extends 'pets/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div style="
+    max-width: 850px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+">
+    <h2 style="font-weight: 900; font-size: 2.8rem; margin-bottom: 10px; color: #222;">
+        Adotar Pet - {{ pet.nome }}
+    </h2>
+    <p style="font-size: 1.1rem; color: #555; margin-bottom: 25px;">
+        Excelente escolha! Ele deve ficar bem feliz ao ganhar um novo lar cheio de carinho.
+    </p>
+
+    {% if msg_sucesso %}
+    <div class="alert alert-success" role="alert" style="margin-bottom: 20px;">
+      {{ msg_sucesso }}
+    </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div style="display: flex; gap: 40px;">
+            <!-- Coluna esquerda: Formulário + Comprovante -->
+            <div style="flex: 1;">
+                <div class="mb-4">
+                    <label for="{{ form.nome_adotante.id_for_label }}" class="form-label fw-semibold">Nome do Adotante:</label>
+                    {{ form.nome_adotante|add_class:"form-control form-control-lg shadow-sm" }}
+                    {% if form.nome_adotante.errors %}
+                    <div class="text-danger mt-1 small">{{ form.nome_adotante.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="cpf_input" class="form-label fw-semibold">CPF:</label>
+                    {{ form.cpf_adotante|add_class:"form-control form-control-lg shadow-sm" | attr:"id:cpf_input" }}
+                    {% if form.cpf_adotante.errors %}
+                    <div class="text-danger mt-1 small">{{ form.cpf_adotante.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="rg_input" class="form-label fw-semibold">RG:</label>
+                    {{ form.rg_adotante|add_class:"form-control form-control-lg shadow-sm" | attr:"id:rg_input" }}
+                    {% if form.rg_adotante.errors %}
+                    <div class="text-danger mt-1 small">{{ form.rg_adotante.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.telefone_adotante.id_for_label }}" class="form-label fw-semibold">Telefone:</label>
+                    {{ form.telefone_adotante|add_class:"form-control form-control-lg shadow-sm" | attr:"id:telefone_input" }}
+                    {% if form.telefone_adotante.errors %}
+                        <div class="text-danger mt-1 small">{{ form.telefone_adotante.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.comprovante_residencia.id_for_label }}" class="form-label fw-semibold">Comprovante de Residência:</label>
+                    {{ form.comprovante_residencia|add_class:"form-control form-control-lg shadow-sm" }}
+                    {% if form.comprovante_residencia.errors %}
+                    <div class="text-danger mt-1 small">{{ form.comprovante_residencia.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Coluna direita: Foto do pet com tamanho fixo -->
+            <div style="flex: 0 0 350px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                {% if pet.foto %}
+                <img src="{{ pet.foto.url }}" alt="Foto de {{ pet.nome }}" style="max-width: 100%; max-height: 300px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); object-fit: contain;">
+                {% else %}
+                <div style="width: 100%; height: 300px; display: flex; justify-content: center; align-items: center; background-color: #f0f0f0; border-radius: 15px; color: #999;">
+                    Sem foto disponível
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm" style="font-weight: 700; margin-top: 10px;">
+            Confirmar Adoção
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const cpfInput = document.getElementById('cpf_input');
+
+  if (cpfInput) {
+    cpfInput.addEventListener('input', () => {
+      let value = cpfInput.value;
+
+      // Remove tudo que não for número
+      value = value.replace(/\D/g, '');
+
+      // Limita a 11 dígitos
+      value = value.slice(0, 11);
+
+      // Aplica a máscara CPF: 123.456.789-00
+      if (value.length > 9) {
+        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+      } else if (value.length > 6) {
+        value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+      } else if (value.length > 3) {
+        value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+      }
+
+      cpfInput.value = value;
+    });
+  }
+
+  const rgInput = document.getElementById('rg_input');
+
+  if (rgInput) {
+    rgInput.addEventListener('input', () => {
+      let value = rgInput.value;
+
+      // Remove tudo que não for número nem hífen
+      value = value.replace(/[^\d\-]/g, '');
+
+      // Limita a 10 caracteres (8 números + hífen + 1 número)
+      value = value.slice(0, 10);
+
+      // Remove hífen para formatar
+      const numbersOnly = value.replace(/\-/g, '');
+
+      if(numbersOnly.length > 8){
+        value = numbersOnly.slice(0,8) + '-' + numbersOnly.slice(8);
+      } else {
+        value = numbersOnly;
+      }
+
+      rgInput.value = value;
+    });
+  }
+
+  const telefoneInput = document.getElementById('telefone_input');
+
+  if (telefoneInput) {
+    telefoneInput.addEventListener('input', () => {
+      let value = telefoneInput.value;
+
+      // Remove tudo que não for número
+      value = value.replace(/\D/g, '');
+
+      // Limita a 11 dígitos (2 DDD + 9 número)
+      value = value.slice(0, 11);
+
+      if (value.length > 6) {
+        value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+      } else if (value.length > 2) {
+        value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+      } else if (value.length > 0) {
+        value = value.replace(/(\d{0,2})/, '($1');
+      }
+
+      telefoneInput.value = value;
+    });
+  }
+});
+</script>
+{% endblock %}

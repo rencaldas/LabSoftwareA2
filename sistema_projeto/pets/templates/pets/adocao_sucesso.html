@@ -1,0 +1,17 @@
+{% extends 'pets/base.html' %}
+
+{% block title %}Pedido de Adoção Enviado{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto; padding: 30px; background-color: #d4edda; border-radius: 15px; color: #155724; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center;">
+    <h2>Obrigado por seu interesse em adotar {{ pet.nome }}!</h2>
+    <p>Recebemos seu pedido e entraremos em contato em breve.</p>
+    <a href="{% url 'listar_pets' %}" style="
+        display: inline-block;
+        margin-top: 20px;
+        color: #155724;
+        font-weight: 700;
+        text-decoration: underline;
+    ">Voltar à lista de animais</a>
+</div>
+{% endblock %}

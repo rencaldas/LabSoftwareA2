@@ -1,0 +1,76 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    background-image: url("{% static 'img/fundo_login.jpg' %}");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 64px 15px 15px; /* <-- adiciona espaço no topo */
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+</style>
+
+<div class="login-container">
+  <div class="login-card card shadow-lg rounded-3">
+    <div class="card-body">
+      <h3 class="card-title mb-4 text-center">Login</h3>
+
+      <form method="POST" action="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+          <div class="mb-3">
+              <label for="email" class="form-label">E-mail</label>
+              <input type="email" name="email" id="email" class="form-control" placeholder="Digite seu e-mail" required>
+          </div>
+
+          <div class="mb-3">
+              <label for="senha" class="form-label">Senha</label>
+              <input type="password" name="senha" id="senha" class="form-control" placeholder="Digite sua senha" required>
+          </div>
+
+          <button type="submit" class="btn btn-dark w-100">Entrar</button>
+      </form>
+
+      <p class="mt-3 text-center">
+          Não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se</a>
+      </p>
+
+      {% if erro %}
+          <div class="alert alert-danger mt-3 text-center" role="alert">
+              {{ erro }}
+          </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
