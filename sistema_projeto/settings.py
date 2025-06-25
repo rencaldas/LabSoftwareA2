@@ -8,7 +8,11 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-placeholder')
 
 DEBUG = True  # Em produção, defina como False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'amorimgg7.pythonanywhere.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',

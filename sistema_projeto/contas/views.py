@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from sistema_projeto.pets.models import Perfil
 from sistema_projeto.pets.models import Pet
-# from .utils import is_admin  # removido, pois não estava sendo usado
 
 
 def login_view(request):
